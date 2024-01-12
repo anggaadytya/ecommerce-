@@ -3,11 +3,27 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const res = await request.json();
+  const data = await signUp(res, (error: any) => {
+    if (error) {
+      return NextResponse.json({
+        success: false,
+        statusCode: 400,
+        message: error.message,
+        data: {},
+      });
+    }
+    return NextResponse.json({
+      success: true,
+      statusCode: 200,
+      message: "Success",
+      data: data,
+    });
+  });
   return NextResponse.json({
     success: true,
     statusCode: 200,
     message: "Success",
-    data: res,
+    data: data,
   });
 }
 
