@@ -1,4 +1,4 @@
-import { signIn } from "@/common/services/firebase";
+import { loginWithGoogle, signIn } from "@/common/services/firebase";
 import { compare } from "bcrypt";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -35,10 +35,10 @@ const authOptions: NextAuthOptions = {
         }
       },
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID || "",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-    }),
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_CLIENT_ID || "",
+    //   clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+    // }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
@@ -46,26 +46,39 @@ const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account, profile, user }: any) {
-      if (account?.provider === "Credentials") {
+      if (account?.provider === "credentials") {
         token.fullname = user.fullname;
         token.email = user.email;
         token.phone = user.phone;
         token.role = user.role;
       }
+      if (account?.provider === "google") {
+        const data = {
+          fullname: user.name,
+          email: user.email,
+          type: "google",
+        };
+
+        await loginWithGoogle(data, (data: any) => {
+          token.fullname = data.fullname;
+          token.email = data.email;
+          token.role = data.role;
+        });
+      }
       return token;
     },
     async session({ session, token }: any) {
       if ("fullname" in token) {
-        session.user.email = token.email;
+        session.user.fullname = token.fullname;
       }
       if ("email" in token) {
         session.user.email = token.email;
       }
       if ("phone" in token) {
-        session.user.email = token.email;
+        session.user.phone = token.phone;
       }
       if ("role" in token) {
-        session.user.email = token.email;
+        session.user.role = token.role;
       }
       return session;
     },

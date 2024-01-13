@@ -1,3 +1,4 @@
+import Navbar from "@/common/components/layouts/Navbar";
 import NextAuthProvider from "@/common/libs/nextAuth";
 import type { Metadata } from "next";
 import { Sora } from "next/font/google";
@@ -23,7 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={sora.className}>
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <NextAuthProvider>
+          <Navbar />
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   );
