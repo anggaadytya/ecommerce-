@@ -1,17 +1,31 @@
 "use client";
+import ButtonAuth from "@/common/components/elements/ButtonAuth";
+import Input from "@/common/components/elements/Input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
+import { Bounce, toast } from "react-toastify";
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { push } = useRouter();
+
+  const handleHidePassword = () => {
+    const passwordInput = document.getElementById(
+      "password"
+    ) as HTMLInputElement;
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      setShowPassword(true);
+    } else {
+      passwordInput.type = "password";
+    }
+  };
 
   const handleSignUp = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    setError("");
     const form = event.target as HTMLFormElement;
     const data = {
       fullname: form.fullname.value,
@@ -22,7 +36,16 @@ const SignUp = () => {
 
     if (!data.fullname || !data.email || !data.password || !data.phone) {
       setIsLoading(false);
-      setError("Please fill in all the fields");
+      toast.error("Please fill in all the fields", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       return;
     }
 
@@ -40,58 +63,37 @@ const SignUp = () => {
       push("/auth/signin");
     } else {
       setIsLoading(false);
-      setError("Email is already registered");
+      toast.error("Email is already registered", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center w-[100vw] h-[100vh]">
       <h1 className="text-2xl mb-3 font-semibold">Sign Up</h1>
-      {error && <p className="text-red-500 py-2">{error}</p>}
-      <div className="w-[40%] p-[20px] shadow-mini mb-[20px]">
+      <div className="w-[90%] lg:w-[40%] p-[20px] shadow-mini mb-[20px]">
         <form onSubmit={(event) => handleSignUp(event)}>
-          <div className="flex flex-col mb-[20px]">
-            <label htmlFor="">Fullname</label>
-            <input
-              type="text"
-              name="fullname"
-              id="fullname"
-              className="border p-2 rounded-md"
-            />
-          </div>
-          <div className="flex flex-col mb-[20px]">
-            <label htmlFor="">Email</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className="border p-2 rounded-md"
-            />
-          </div>
-          <div className="flex flex-col mb-[20px]">
-            <label htmlFor="">Password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              className="border p-2 rounded-md"
-            />
-          </div>
-          <div className="flex flex-col mb-[20px]">
-            <label htmlFor="">Phone Number</label>
-            <input
-              type="text"
-              name="phone"
-              id="phone"
-              className="border p-2 rounded-md"
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-black text-white w-full p-2 text-base rounded-md"
-          >
+          <Input label="Fullname" type="text" name="fullname" />
+          <Input label="Email" type="email" name="email" />
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            showPassword={showPassword}
+            hidePassword={handleHidePassword}
+          />
+          <Input label="Phone Number" type="text" name="phone" />
+          <ButtonAuth type="submit">
             {isLoading ? "Loading..." : "Register"}
-          </button>
+          </ButtonAuth>
         </form>
       </div>
       <p>

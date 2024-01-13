@@ -2,6 +2,7 @@ import Navbar from "@/common/components/layouts/Navbar";
 import NextAuthProvider from "@/common/libs/nextAuth";
 import type { Metadata } from "next";
 import { Sora } from "next/font/google";
+import { ToastContainer } from "react-toastify";
 import "./globals.css";
 
 const sora = Sora({
@@ -27,6 +28,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <Navbar />
           {children}
+          <ToastContainer />
         </NextAuthProvider>
       </body>
     </html>
