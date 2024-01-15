@@ -1,8 +1,10 @@
 export interface inputType {
   label?: string;
   name: string;
-  type: string;
+  type?: string;
   placeholder?: string;
+  defaultValue?: string;
+  disabled?: boolean;
 }
 
 export interface buttonHideType {

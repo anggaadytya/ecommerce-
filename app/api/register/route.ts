@@ -1,4 +1,9 @@
-import { retriveDataById, signUp } from "@/common/services/firebase";
+import {
+  deleteData,
+  retriveData,
+  signUp,
+  updateData,
+} from "@/common/services/firebase";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -27,30 +32,69 @@ export async function POST(request: NextRequest) {
   });
 }
 
-// export async function GET(request: NextRequest) {
-//   const { searchParams } = new URL(request.url);
-//   const id = searchParams.get("id");
-//   if (id) {
-//     const detailUser = await retriveDataById("users", id);
-//     if (detailUser) {
-//       return NextResponse.json({
-//         success: true,
-//         statusCode: 200,
-//         message: "Success",
-//         data: detailUser,
-//       });
-//     }
-//     return NextResponse.json({
-//       success: false,
-//       statusCode: 404,
-//       message: "Not Found",
-//       data: {},
-//     });
-//   }
+export async function GET(request: NextRequest, response: NextResponse) {
+  const users = await retriveData("users");
+  const data = users.map((user: any) => {
+    delete user.password;
+    return user;
+  });
 
-//   return NextResponse.json({
-//     status: 200,
-//     message: "successfully",
-//     data: [],
-//   });
-// }
+  return NextResponse.json({
+    success: true,
+    statusCode: 200,
+    message: "Success",
+    data: data,
+  });
+}
+
+export async function PATCH(request: NextRequest, response: NextResponse) {
+  const { id, data } = await request.json();
+  const result = await updateData("users", id, data, (result: boolean) => {
+    if (!result) {
+      return NextResponse.json({
+        success: false,
+        statusCode: 400,
+        message: "Error",
+        data: {},
+      });
+    }
+    return NextResponse.json({
+      success: true,
+      statusCode: 200,
+      message: "Success",
+      data: result,
+    });
+  });
+  return NextResponse.json({
+    success: true,
+    statusCode: 200,
+    message: "Success",
+    data: result,
+  });
+}
+
+export async function DELETE(request: NextRequest, response: NextResponse) {
+  const { id } = await request.json();
+  const result = await deleteData("users", id, (result: boolean) => {
+    if (!result) {
+      return NextResponse.json({
+        success: false,
+        statusCode: 400,
+        message: "Error",
+        data: {},
+      });
+    }
+    return NextResponse.json({
+      success: true,
+      statusCode: 200,
+      message: "Success",
+      data: result,
+    });
+  });
+  return NextResponse.json({
+    success: true,
+    statusCode: 200,
+    message: "Success",
+    data: result,
+  });
+}

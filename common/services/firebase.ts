@@ -1,11 +1,13 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
   getFirestore,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import appFirebase from "../libs/firebase";
@@ -50,7 +52,8 @@ export async function signUp(userData: userDataFirebase, callback: Function) {
     userData.password = await bcrypt.hash(userData.password, 10);
     userData.created_at = new Date();
     userData.updated_at = new Date();
-    userData.image = "https://res.cloudinary.com/ddugt5n5v/image/upload/v1705219864/person_u2rq22.png";
+    userData.image =
+      "https://res.cloudinary.com/ddugt5n5v/image/upload/v1705219864/person_u2rq22.png";
     await addDoc(collection(fireStore, "users"), userData)
       .then(() => {
         callback(true);
@@ -78,7 +81,10 @@ export async function signIn(email: string) {
   }
 }
 
-export async function loginWithGoogle(data: any, callback: Function) {
+export async function loginWithGoogle(
+  data: userDataFirebase,
+  callback: Function
+) {
   const q = query(
     collection(fireStore, "users"),
     where("email", "==", data.email)
@@ -94,8 +100,42 @@ export async function loginWithGoogle(data: any, callback: Function) {
     callback(user[0]);
   } else {
     data.role = "member";
+    data.password = "";
+    data.created_at = new Date();
+    data.updated_at = new Date();
     await addDoc(collection(fireStore, "users"), data).then(() => {
       callback(data);
     });
   }
+}
+
+export async function updateData(
+  collectionName: string,
+  id: string,
+  data: any,
+  callback: Function
+) {
+  const docRef = doc(fireStore, collectionName, id);
+  await updateDoc(docRef, data)
+    .then(() => {
+      callback(true);
+    })
+    .catch(() => {
+      callback(false);
+    });
+}
+
+export async function deleteData(
+  collectionName: string,
+  id: string,
+  callback: Function
+) {
+  const docRef = doc(fireStore, collectionName, id);
+  await deleteDoc(docRef)
+    .then(() => {
+      callback(true);
+    })
+    .catch(() => {
+      callback(false);
+    });
 }

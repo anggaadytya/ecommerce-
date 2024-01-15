@@ -1,9 +1,11 @@
-import React from 'react'
+import { Products } from "@/modules/admin";
+import { Metadata } from "next";
+import React from "react";
+
+export const metadata: Metadata = {
+  title: "Admin | Products",
+};
 
 export default function page() {
-  return (
-    <div>
-        <h1>PRODUCT</h1>
-    </div>
-  )
+  return <Products />;
 }

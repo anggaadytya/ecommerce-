@@ -7,3 +7,12 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+th,td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2
+}
