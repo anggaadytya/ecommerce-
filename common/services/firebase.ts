@@ -48,6 +48,9 @@ export async function signUp(userData: userDataFirebase, callback: Function) {
       userData.role = "member";
     }
     userData.password = await bcrypt.hash(userData.password, 10);
+    userData.created_at = new Date();
+    userData.updated_at = new Date();
+    userData.image = "https://res.cloudinary.com/ddugt5n5v/image/upload/v1705219864/person_u2rq22.png";
     await addDoc(collection(fireStore, "users"), userData)
       .then(() => {
         callback(true);

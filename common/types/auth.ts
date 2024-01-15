@@ -3,8 +3,12 @@ export interface inputType {
   name: string;
   type: string;
   placeholder?: string;
-  hidePassword?: () => void;
-  showPassword?: boolean;
+}
+
+export interface buttonHideType {
+  showPassword: boolean;
+  handleHidePassword: () => void;
+  className?: string;
 }
 
 export interface buttonType {
@@ -12,4 +16,12 @@ export interface buttonType {
   onClick?: () => void;
   children: React.ReactNode;
   className?: string;
+}
+
+export interface layoutAuthType {
+  title: string;
+  children: React.ReactNode;
+  link: string;
+  linkTitle: string;
+  linkText: string;
 }

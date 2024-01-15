@@ -5,13 +5,30 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { FaGoogle } from "react-icons/fa";
 import Input from "@/common/components/elements/Input";
-import ButtonAuth from "@/common/components/elements/ButtonAuth";
+import ButtonAuth from "@/modules/auth/components/ButtonAuth";
 import { Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ButtonHide from "../components/ButtonHide";
+import LayoutAuth from "../components/LayoutAuth";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { push } = useRouter();
+
+  const handleHidePassword = () => {
+    const passwordInput = document.getElementById(
+      "password"
+    ) as HTMLInputElement;
+
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      setShowPassword(true);
+    } else {
+      passwordInput.type = "password";
+      setShowPassword(!showPassword);
+    }
+  };
 
   const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -55,35 +72,32 @@ const SignIn = () => {
     }
   };
   return (
-    <div className="flex flex-col items-center justify-center w-[100vw] h-[100vh]">
-      <h1 className="text-2xl mb-3 font-semibold">Sign In</h1>
-      <div className="w-[90%] lg:w-[40%] p-[20px] shadow-mini mb-[20px]">
-        <form onSubmit={handleSignIn}>
-          <Input label="Email" type="email" name="email" />
-          <Input label="Password" type="password" name="password" />
-          <ButtonAuth type="submit" className="bg-blue-500 shadow-mini">
-            {isLoading ? "Loading..." : "Login"}
-          </ButtonAuth>
-        </form>
-        <h1 className="text-center py-2">or</h1>
+    <LayoutAuth title="Sign In" link="/auth/signup" linkTitle="Sign Up" linkText="Don't have an account?">
+      <form onSubmit={handleSignIn}>
+        <Input label="Email" type="email" name="email" />
+        <Input label="Password" type="password" name="password" />
         <ButtonAuth
-          type="button"
-          onClick={() =>
-            signIn("google", { callbackUrl: "/", redirect: false })
-          }
-          className="bg-white text-black shadow-mini"
+          type="submit"
+          className="bg-blue-500 text-white shadow-mini"
         >
-          <FaGoogle />
-          Sign in with Google
+          {isLoading ? "Loading..." : "Login"}
         </ButtonAuth>
-      </div>
-      <p>
-        Don`t have an account?{" "}
-        <Link className="text-blue-500 font-semibold" href={"/auth/signup"}>
-          Sign Up
-        </Link>{" "}
-      </p>
-    </div>
+      </form>
+      <ButtonHide
+        showPassword={showPassword}
+        handleHidePassword={handleHidePassword}
+        className="top-[43%] right-8"
+      />
+      <h1 className="text-center py-2">or</h1>
+      <ButtonAuth
+        type="button"
+        onClick={() => signIn("google", { callbackUrl: "/", redirect: false })}
+        className="bg-white text-black shadow-mini"
+      >
+        <FaGoogle />
+        Sign in with Google
+      </ButtonAuth>
+    </LayoutAuth>
   );
 };
 

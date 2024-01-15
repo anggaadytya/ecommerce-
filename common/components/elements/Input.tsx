@@ -7,11 +7,9 @@ const Input = ({
   name,
   type,
   placeholder,
-  hidePassword,
-  showPassword,
 }: inputType) => {
   return (
-    <div className="flex flex-col mb-[20px] relative">
+    <div className="flex flex-col mb-[20px]">
       {label && <label htmlFor={name}>{label}</label>}
       <input
         type={type}
@@ -20,11 +18,6 @@ const Input = ({
         placeholder={placeholder}
         className="p-2 rounded-md shadow-mini"
       />
-      {hidePassword && (
-        <button className="absolute right-4 top-9" onClick={hidePassword}>
-          {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-        </button>
-      )}
     </div>
   );
 };

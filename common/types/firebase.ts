@@ -4,4 +4,7 @@ export interface userDataFirebase {
   password: string;
   phone: number;
   role?: string;
+  created_at?: Date;
+  updated_at?: Date;
+  image?: string;
 }

@@ -50,12 +50,14 @@ const authOptions: NextAuthOptions = {
         token.fullname = user.fullname;
         token.email = user.email;
         token.phone = user.phone;
+        token.image = user.image;
         token.role = user.role;
       }
       if (account?.provider === "google") {
         const data = {
           fullname: user.name,
           email: user.email,
+          image: user.image,
           type: "google",
         };
 
