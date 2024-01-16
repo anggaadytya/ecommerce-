@@ -6,7 +6,17 @@ export const authServices = {
 
 export const userServices = {
   getAllUsers: () => instance.get(`/api/register`),
-  updateUser: (id: string, data: any) =>
-    instance.patch(`/api/register`, { id, data }),
-  deleteUser: (id: string) => instance.delete(`/api/register`, { data: { id } }),
+  updateUser: (id: string, data: any, token: string) =>
+    instance.patch(`/api/register`, {
+      id,
+      data,
+      token,
+    }),
+  deleteUser: (id: string, token: string) =>
+    instance.delete(`/api/register`, {
+      data: { id },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 };

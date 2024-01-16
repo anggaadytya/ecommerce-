@@ -5,30 +5,28 @@ import {
   updateData,
 } from "@/common/services/firebase";
 import { NextRequest, NextResponse } from "next/server";
+import Jwt from "jsonwebtoken";
 
 export async function POST(request: NextRequest) {
   const res = await request.json();
-  const data = await signUp(res, (error: any) => {
+  await signUp(res, (error: any) => {
     if (error) {
       return NextResponse.json({
         success: false,
         statusCode: 400,
         message: error.message,
-        data: {},
       });
     }
     return NextResponse.json({
       success: true,
       statusCode: 200,
       message: "Success",
-      data: data,
     });
   });
   return NextResponse.json({
     success: true,
     statusCode: 200,
     message: "Success",
-    data: data,
   });
 }
 
@@ -48,53 +46,64 @@ export async function GET(request: NextRequest, response: NextResponse) {
 }
 
 export async function PATCH(request: NextRequest, response: NextResponse) {
-  const { id, data } = await request.json();
-  const result = await updateData("users", id, data, (result: boolean) => {
-    if (!result) {
-      return NextResponse.json({
-        success: false,
-        statusCode: 400,
-        message: "Error",
-        data: {},
-      });
+  const { id, data, token } = await request.json();
+  Jwt.verify(
+    token,
+    process.env.NEXTAUTH_SECRET || "",
+    async (error: any, decode: any) => {
+      if (decode && decode.role === "admin") {
+        await updateData("users", id, data, (result: boolean) => {
+          if (!result) {
+            return NextResponse.json({
+              success: false,
+              statusCode: 400,
+              message: "Error",
+            });
+          }
+          return NextResponse.json({
+            success: true,
+            statusCode: 200,
+            message: "Success",
+          });
+        });
+      }
     }
-    return NextResponse.json({
-      success: true,
-      statusCode: 200,
-      message: "Success",
-      data: result,
-    });
-  });
+  );
   return NextResponse.json({
-    success: true,
-    statusCode: 200,
-    message: "Success",
-    data: result,
+    success: false,
+    statusCode: 500,
+    message: "Access Denied",
   });
 }
 
 export async function DELETE(request: NextRequest, response: NextResponse) {
   const { id } = await request.json();
-  const result = await deleteData("users", id, (result: boolean) => {
-    if (!result) {
-      return NextResponse.json({
-        success: false,
-        statusCode: 400,
-        message: "Error",
-        data: {},
-      });
+  const token = request.headers.get("Authorization")?.split(" ")[1] || "";
+  Jwt.verify(
+    token,
+    process.env.NEXTAUTH_SECRET || "",
+    async (error: any, decode: any) => {
+      if (decode && decode.role === "admin") {
+        await deleteData("users", id, (result: boolean) => {
+          if (!result) {
+            return NextResponse.json({
+              success: false,
+              statusCode: 400,
+              message: "Error",
+            });
+          }
+          return NextResponse.json({
+            success: true,
+            statusCode: 200,
+            message: "Success",
+          });
+        });
+      }
     }
-    return NextResponse.json({
-      success: true,
-      statusCode: 200,
-      message: "Success",
-      data: result,
-    });
-  });
+  );
   return NextResponse.json({
-    success: true,
-    statusCode: 200,
-    message: "Success",
-    data: result,
+    success: false,
+    statusCode: 500,
+    message: "Access Denied",
   });
 }

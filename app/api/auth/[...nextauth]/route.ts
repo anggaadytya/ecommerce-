@@ -4,6 +4,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import jwt from "jsonwebtoken";
 
 const authOptions: NextAuthOptions = {
   session: {
@@ -82,6 +83,13 @@ const authOptions: NextAuthOptions = {
       if ("role" in token) {
         session.user.role = token.role;
       }
+
+      const accessToken = jwt.sign(token, process.env.NEXTAUTH_SECRET || "",{
+        algorithm: "HS256",
+      });
+
+      session.accessToken = accessToken;
+        
       return session;
     },
   },

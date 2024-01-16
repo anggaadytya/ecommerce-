@@ -7,12 +7,24 @@ import Modal from "../components/Modal";
 import Input from "@/common/components/elements/Input";
 import Select from "@/common/components/elements/Select";
 import ButtonAuth from "@/modules/auth/components/ButtonAuth";
+import { useSession } from "next-auth/react";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableColumn,
+  TableRow,
+  TableCell,
+ 
+} from "@nextui-org/react";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [modalUdateUser, setModalUdateUser] = useState<any>("");
   const [deleteUser, setDeleteUser] = useState<any>("");
   const [isLoading, setIsLoading] = useState(false);
+  const session: any = useSession();
+ 
 
   const getAllUsers = async () => {
     try {
@@ -31,7 +43,11 @@ const Users = () => {
       role: form.role.value,
     };
 
-    const result = await userServices.updateUser(modalUdateUser.id, data);
+    const result = await userServices.updateUser(
+      modalUdateUser.id,
+      data,
+      session.data?.accessToken
+    );
     if (result.status === 200) {
       form.reset();
       setIsLoading(false);
@@ -53,7 +69,10 @@ const Users = () => {
   };
 
   const handleDeleteUser = async () => {
-    const result = await userServices.deleteUser(deleteUser.id);
+    const result = await userServices.deleteUser(
+      deleteUser.id,
+      session.data?.accessToken
+    );
     if (result.status === 200) {
       setIsLoading(false);
       setDeleteUser("");
@@ -78,29 +97,27 @@ const Users = () => {
   }, []);
 
   return (
-    <>
-      <section className="bg-white p-5 rounded-md">
-        <h1>Users Admin Page</h1>
-        <table className="w-full border-space-0 border-collapse border">
-          <thead className="border-b bg-neutral-300">
-            <tr>
-              <th>#</th>
-              <th>Fullname</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Role</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
+    <main className="flex flex-col gap-y-5">
+      <section className="bg-white p-5 rounded-2xl">
+        <h1 className="pb-2"># Users Admin Page</h1>
+        <Table aria-label="Table User">
+          <TableHeader>
+            <TableColumn>#</TableColumn>
+            <TableColumn>Fullname</TableColumn>
+            <TableColumn>Email</TableColumn>
+            <TableColumn>Phone</TableColumn>
+            <TableColumn>Role</TableColumn>
+            <TableColumn>Action</TableColumn>
+          </TableHeader>
+          <TableBody>
             {users.map((user: any, index: number) => (
-              <tr key={index} className="">
-                <td>{index + 1}</td>
-                <td>{user.fullname}</td>
-                <td>{user.email}</td>
-                <td>{user.phone}</td>
-                <td>{user.role}</td>
-                <td>
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{user.fullname}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.phone}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>
                   <div className="flex gap-x-3 text-white">
                     <button
                       className="bg-blue-400 p-2 rounded-md"
@@ -116,12 +133,13 @@ const Users = () => {
                     >
                       <FiTrash2 />
                     </button>
+                   
                   </div>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </section>
       {modalUdateUser !== "" && (
         <Modal>
@@ -198,7 +216,7 @@ const Users = () => {
           </div>
         </Modal>
       )}
-    </>
+    </main>
   );
 };
 
