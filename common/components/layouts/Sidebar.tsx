@@ -10,10 +10,6 @@ const Sidebar = () => {
   const path = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleOpenMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   return (
     <>
       <div className="w-[15em] lg:w-[19.5em] h-[100vh] hidden md:block" />

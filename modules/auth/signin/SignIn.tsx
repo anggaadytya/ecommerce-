@@ -38,7 +38,7 @@ const SignIn = () => {
         redirect: false,
         email: form.email.value,
         password: form.password.value,
-        callbackUrl: "/",
+        // callbackUrl: "/",
       });
       if (res?.ok) {
         setIsLoading(false);

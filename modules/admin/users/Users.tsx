@@ -8,15 +8,6 @@ import Input from "@/common/components/elements/Input";
 import Select from "@/common/components/elements/Select";
 import ButtonAuth from "@/modules/auth/components/ButtonAuth";
 import { useSession } from "next-auth/react";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableColumn,
-  TableRow,
-  TableCell,
- 
-} from "@nextui-org/react";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -24,7 +15,6 @@ const Users = () => {
   const [deleteUser, setDeleteUser] = useState<any>("");
   const [isLoading, setIsLoading] = useState(false);
   const session: any = useSession();
- 
 
   const getAllUsers = async () => {
     try {
@@ -100,24 +90,24 @@ const Users = () => {
     <main className="flex flex-col gap-y-5">
       <section className="bg-white p-5 rounded-2xl">
         <h1 className="pb-2"># Users Admin Page</h1>
-        <Table aria-label="Table User">
-          <TableHeader>
-            <TableColumn>#</TableColumn>
-            <TableColumn>Fullname</TableColumn>
-            <TableColumn>Email</TableColumn>
-            <TableColumn>Phone</TableColumn>
-            <TableColumn>Role</TableColumn>
-            <TableColumn>Action</TableColumn>
-          </TableHeader>
-          <TableBody>
+        <table aria-label="Table User">
+          <th>
+            <th>#</th>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Action</th>
+          </th>
+          <tbody>
             {users.map((user: any, index: number) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{user.fullname}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.phone}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>
+              <th key={index}>
+                <td>{index + 1}</td>
+                <td>{user.fullname}</td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
+                <td>{user.role}</td>
+                <td>
                   <div className="flex gap-x-3 text-white">
                     <button
                       className="bg-blue-400 p-2 rounded-md"
@@ -133,13 +123,12 @@ const Users = () => {
                     >
                       <FiTrash2 />
                     </button>
-                   
                   </div>
-                </TableCell>
-              </TableRow>
+                </td>
+              </th>
             ))}
-          </TableBody>
-        </Table>
+          </tbody>
+        </table>
       </section>
       {modalUdateUser !== "" && (
         <Modal>

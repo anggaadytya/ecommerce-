@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Sora } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
-import { Providers } from "@/common/libs/NextUi";
+import { Providers } from "@/common/libs/Themes";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" suppressHydrationWarning>
       <body className={sora.className}>
         <NextAuthProvider>
           <Providers>

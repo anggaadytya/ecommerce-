@@ -2,13 +2,7 @@
 import Image from "next/image";
 import React from "react";
 import { useSession, signOut } from "next-auth/react";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownSection,
-  DropdownItem,
-} from "@nextui-org/react";
+
 const Dashboard = () => {
   const { data: session } = useSession();
 
@@ -23,23 +17,7 @@ const Dashboard = () => {
             />
           </div>
 
-          <Dropdown>
-            <DropdownTrigger>
-              <div className="border border-neutral-400 rounded-full w-12 h-12 cursor-pointer">
-                <Image
-                  src={session?.user?.image || ""}
-                  alt="avatar"
-                  width={40}
-                  height={40}
-                  className="bg-cover w-full h-full rounded-full"
-                />
-              </div>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Static Actions">
-              <DropdownItem>Profile</DropdownItem>
-              <DropdownItem onClick={() => signOut()}>Logout</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+       
         </div>
       </section>
       <section className="bg-white p-5 rounded-md">
