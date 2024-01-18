@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { IMAGE_MENU } from "@/common/constant/image";
 import {
   Carousel,
@@ -12,12 +12,22 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const HomePage = () => {
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const Interval = setTimeout(() => {
+      setIsLoaded(true);
+    }, 5000);
+
+    return () => clearTimeout(Interval);
+  });
   return (
     <>
-      <div className="bg-neutral-200/50 py-5 relative">
+      <div className="bg-neutral-200/50 py-5 relative ">
         <div className="box">
           <div></div>
           <div></div>
@@ -38,18 +48,25 @@ const HomePage = () => {
               plugins={[plugin.current]}
               onMouseEnter={plugin.current.stop}
               onMouseLeave={plugin.current.reset}
+              className="w-full md:w-[40rem] lg:w-[60rem] h-[7.5rem] md:h-[17.5rem] lg:h-[35.1rem] flex items-center justify-center"
             >
               <CarouselContent>
                 {IMAGE_MENU.map((item, index) => (
-                  <CarouselItem key={index} className="">
-                    <div className="flex items-center justify-center ">
-                      <Image
-                        src={item.img}
-                        alt="image"
-                        width={500}
-                        height={500}
-                        className="w-[70%] lg:w-[60%] bg-red-200 rounded-[30px]"
-                      />
+                  <CarouselItem key={index} className="w-full h-full">
+                    <div className="flex items-center justify-center w-full h-full ">
+                      <Suspense
+                        fallback={
+                          <Skeleton className="w-[14rem] md:w-[27.4rem] lg:w-[47rem] h-[7.5rem] md:h-[14rem] lg:h-[27rem] rounded-[30px] shadow bg-neutral-600 overflow-x-hidden " />
+                        }
+                      >
+                        <Image
+                          src={item.img}
+                          alt="image"
+                          width={500}
+                          height={500}
+                          className="w-[70%] lg:w-[80%] rounded-[30px] shadow shadow-neutral-600"
+                        />
+                      </Suspense>
                     </div>
                   </CarouselItem>
                 ))}
@@ -60,7 +77,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      {/*  */}
+      {/* POPULAR */}
       <div className="container mx-auto py-5 h-full">
         POPULAR
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5 h-full">
@@ -88,6 +105,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+      {/* PRODUCT */}
       <div className="py-5 container mx-auto h-full">
         <div className="flex items-center gap-x-3 py-4 overflow-x-auto">
           {Array.from({ length: 5 }).map((_, index) => (
