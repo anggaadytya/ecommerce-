@@ -141,7 +141,10 @@ const Navbar = () => {
               {session ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="sm" className="bg-white rounded-xl text-neutral-800">
+                    <Button
+                      size="sm"
+                      className="bg-white rounded-xl text-neutral-800"
+                    >
                       {session?.user?.fullname.split(" ")[0]}
                     </Button>
                   </DropdownMenuTrigger>

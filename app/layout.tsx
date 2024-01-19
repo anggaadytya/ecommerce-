@@ -5,6 +5,7 @@ import { Sora } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
 import { Providers } from "@/common/libs/Themes";
+import Footer from "@/common/components/layouts/Footer";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -30,6 +31,7 @@ export default function RootLayout({
           <Providers>
             <Navbar />
             {children}
+            <Footer />
             <ToastContainer />
           </Providers>
         </NextAuthProvider>
