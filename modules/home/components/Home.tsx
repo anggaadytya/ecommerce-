@@ -13,7 +13,6 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import Footer from "@/common/components/layouts/Footer";
 import { cn } from "@/lib/utils";
 
 const HomePage = () => {
@@ -31,6 +30,7 @@ const HomePage = () => {
 
   return (
     <>
+      {/* CAROUSEL */}
       <div className="bg-neutral-200/50 py-5 relative ">
         <div className="box">
           <div></div>
@@ -86,7 +86,7 @@ const HomePage = () => {
       <div className="container mx-auto py-5 h-full">
         <h1 className="text-white pb-5">POPULAR</h1>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5 h-full">
-          {Array.from({ length: 9 }).map((_, index) => (
+          {Array.from({ length: 8 }).map((_, index) => (
             <Card
               key={index}
               className="flex gap-2 items-center justify-start cursor-pointer group hover:outline rounded-xl outline-yellow-500 p-1 w-full h-[4rem] md:h-[5rem] lg:h-[7.3rem] bg-neutral-600"

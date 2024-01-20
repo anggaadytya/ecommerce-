@@ -11,7 +11,7 @@ const Footer = () => {
   const path = usePathname();
 
   return (
-    <>
+    <div className="container mx-auto">
       {!disableNavbar.includes(path.split("/")[1]) && (
         <footer className="flex flex-col text-black-100  border-t border-gray-100 text-white bg-neutral-800">
           <div className="flex max-md:flex-col flex-wrap justify-between gap-5 sm:px-16 px-6 py-5">
@@ -69,7 +69,7 @@ const Footer = () => {
           </div>
         </footer>
       )}
-    </>
+    </div>
   );
 };
 

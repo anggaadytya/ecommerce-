@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={sora.className}>
+      <body className={`${sora.className} bg-neutral-800`}>
         <NextAuthProvider>
           <Providers>
             <Navbar />
